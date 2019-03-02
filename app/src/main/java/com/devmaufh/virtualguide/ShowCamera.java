@@ -44,14 +44,10 @@ public class ShowCamera extends SurfaceView implements SurfaceHolder.Callback {
             e.printStackTrace();
         }
     }
-
     @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-
     }
-
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-
     }
 }
