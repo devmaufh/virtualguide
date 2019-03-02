@@ -1,63 +1,37 @@
 package com.devmaufh.virtualguide;
 
 import android.Manifest;
-import android.content.ContentResolver;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.hardware.Camera;
 import android.util.Log;
-import android.widget.Toast;
-
-import java.io.File;
-import java.net.URI;
-import java.util.List;
-
-import pub.devrel.easypermissions.EasyPermissions;
+import android.view.SurfaceHolder;
+import android.widget.FrameLayout;
 
 public class MainActivity extends AppCompatActivity {
-    private Uri mImageUri;
+    Camera camera;
+    FrameLayout fr_camera;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        check_permissions();
-        open_camera();
-
+        bindUI();
     }
-    private void check_permissions(){
-        EasyPermissions.PermissionCallbacks p= new EasyPermissions.PermissionCallbacks() {
-            @Override
-            public void onPermissionsGranted(int requestCode, List<String> perms) {
-
-            }
-
-            @Override
-            public void onPermissionsDenied(int requestCode, List<String> perms) {
-
-            }
-
-            @Override
-            public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-                EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-
-            }
-        };
-
+    private void bindUI(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 50);
+        else{
+            fr_camera=(FrameLayout)findViewById(R.id.frame_camera);
+            camera=Camera.open();
+            ShowCamera showCamera= new ShowCamera(this,camera);
+            fr_camera.addView(showCamera);
+        }
     }
-    private void open_camera() {
-        Intent intent_camera= new Intent("android.media.action.IMAGE_CAPTURE");
-        startActivity(intent_camera);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    private void releaseCameraAndPreview(){
 
     }
 }
